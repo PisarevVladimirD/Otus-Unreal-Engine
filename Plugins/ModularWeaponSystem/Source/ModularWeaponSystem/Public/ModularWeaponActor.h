@@ -43,6 +43,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Shot(FVector ShotLocation);
+	void AddModule();
+	void RemoveModule();
 
 private:
 

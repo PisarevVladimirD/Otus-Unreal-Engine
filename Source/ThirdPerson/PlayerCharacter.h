@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+#include "ModularWeaponSystem.h"
+#include "ModularWeaponActor.h"
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -19,4 +21,12 @@ public:
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void CallPluginFunctionAdd();
+	void CallPluginFunctionRemove();
+private:
+	AModularWeaponActor* PluginInstance; 
+
+	void CallAddFunction(); 
+	void CallRemoveFunction();
 };
+

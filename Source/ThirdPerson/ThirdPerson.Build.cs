@@ -21,7 +21,7 @@ public class ThirdPerson : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "ModularWeaponSystem", "ModularWeaponSystem" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"ThirdPerson",
@@ -37,7 +37,8 @@ public class ThirdPerson : ModuleRules
 			"ThirdPerson/Variant_SideScrolling/AI",
 			"ThirdPerson/Variant_SideScrolling/Gameplay",
 			"ThirdPerson/Variant_SideScrolling/Interfaces",
-			"ThirdPerson/Variant_SideScrolling/UI"
+			"ThirdPerson/Variant_SideScrolling/UI",
+			"ModularWeaponSystem"
 		});
 
 		// Uncomment if you are using Slate UI
