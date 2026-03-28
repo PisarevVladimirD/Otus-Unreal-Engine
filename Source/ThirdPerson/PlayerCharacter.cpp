@@ -7,7 +7,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-    PluginInstance = new AModularWeaponActor();
+    ///PluginInstance = new AModularWeaponActor();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -19,11 +19,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveForward", this, &ABaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ABaseCharacter::MoveRight);
     
-    PlayerInputComponent->BindAction("CallAddFunction", IE_Pressed, this, &APlayerCharacter::CallAddFunction);
-    PlayerInputComponent->BindAction("CallRemoveFunction", IE_Pressed, this, &APlayerCharacter::CallRemoveFunction);
+    //PlayerInputComponent->BindAction("CallAddFunction", IE_Pressed, this, &APlayerCharacter::CallAddFunction);
+    //PlayerInputComponent->BindAction("CallRemoveFunction", IE_Pressed, this, &APlayerCharacter::CallRemoveFunction);
     
 }
-void APlayerCharacter::CallPluginFunctionAdd()
+/*void APlayerCharacter::CallPluginFunctionAdd()
 {
     if (PluginInstance)
     {
@@ -36,4 +36,4 @@ void APlayerCharacter::CallPluginFunctionRemove()
     {
         PluginInstance->RemoveModule(); // Вызываем функцию из плагина
     }
-}
+}*/
