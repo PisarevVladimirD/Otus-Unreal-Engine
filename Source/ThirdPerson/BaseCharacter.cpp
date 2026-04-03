@@ -137,6 +137,8 @@ void ABaseCharacter::EquipWeapon(int32 Index)
 void ABaseCharacter::NextWeapon()
 {
     if (Inventory.Num() == 0) return;
+    int32 CurrentIndex = Inventory.Find(CurrentWeapon);
+    CurrentWeapon->Destroy();
     int32 NewIndex = (Inventory.Find(CurrentWeapon) + 1) % Inventory.Num();
     EquipWeapon(NewIndex);
 }
@@ -145,6 +147,7 @@ void ABaseCharacter::PrevWeapon()
 {
     if (Inventory.Num() == 0) return;
     int32 CurrentIndex = Inventory.Find(CurrentWeapon);
+    CurrentWeapon->Destroy();
     int32 NewIndex = (CurrentIndex - 1 + Inventory.Num()) % Inventory.Num();
     EquipWeapon(NewIndex);
 }
