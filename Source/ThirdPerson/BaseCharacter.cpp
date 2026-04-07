@@ -7,6 +7,7 @@
 #include "GameFramework/Controller.h"
 #include "Components/InputComponent.h"
 #include "Engine/World.h"
+#include "HealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ABaseCharacter::ABaseCharacter()
@@ -25,6 +26,8 @@ ABaseCharacter::ABaseCharacter()
     bUseControllerRotationYaw = false;
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
+    
+    HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
 void ABaseCharacter::BeginPlay()
@@ -150,4 +153,12 @@ void ABaseCharacter::PrevWeapon()
     CurrentWeapon->Destroy();
     int32 NewIndex = (CurrentIndex - 1 + Inventory.Num()) % Inventory.Num();
     EquipWeapon(NewIndex);
+}
+float ABaseCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    if (HealthComponent)
+    {
+        HealthComponent->TakeDamage(Damage, EventInstigator, DamageCauser);
+    }
+    return Damage;
 }

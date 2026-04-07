@@ -53,6 +53,10 @@ public:
 	
 	TArray<AWeapon*> Inventory;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	class UHealthComponent* HealthComponent;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	
 private:
 	bool bIsFiring = false;
 	void HandleFiring();

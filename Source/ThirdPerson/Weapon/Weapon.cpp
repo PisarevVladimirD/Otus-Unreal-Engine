@@ -2,7 +2,7 @@
 
 
 #include "Weapon/Weapon.h"
-
+#include "HealthComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 
@@ -73,8 +73,15 @@ void AWeapon::ApplyDamage(AActor* HitActor, const FVector& HitLocation)
 {
 	if (HitActor)
 	{
+		UHealthComponent* HealthComp = HitActor->FindComponentByClass<UHealthComponent>();
+		if (HealthComp)
+		{
+			HealthComp->TakeDamage(Damage, Cast<AController>(GetOwner()->GetOwner()), this);
+		}
+		else
+		{
 		FPointDamageEvent DamageEvent(Damage, FHitResult(), FVector::ZeroVector, nullptr);
-		HitActor->TakeDamage(Damage, DamageEvent, Cast<AController>(GetOwner()->GetOwner()), this);
+		HitActor->TakeDamage(Damage, DamageEvent, Cast<AController>(GetOwner()->GetOwner()), this);}
 	}
 }
 
