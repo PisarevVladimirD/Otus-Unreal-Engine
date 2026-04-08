@@ -32,7 +32,9 @@ void UHealthComponent::TakeDamage(float Damage, AController* InstigatedBy, AActo
 	float ActualDamage = FMath::Min(Damage, CurrentHealth);
 	CurrentHealth -= ActualDamage;
 	
-
+	FString DamageMsg = FString::Printf(TEXT("[Health] %.1f Получен урон! HP: %.0f / %.0f"), 
+			ActualDamage, CurrentHealth, MaxHealth);
+	PrintToScreen(DamageMsg, 2.0f, FColor::Red);
 	
 	
 
@@ -46,6 +48,8 @@ void UHealthComponent::HandleDeath()
 {
 	if (bAutoDestroyOnDeath)
 	{
+		FString DeathMsg = FString::Printf(TEXT("[Health] %s HP"), *GetOwner()->GetName());
+		PrintToScreen(DeathMsg, 4.0f, FColor::Black);
 		AActor* Owner = GetOwner();
 		if (Owner)
 		{
@@ -54,6 +58,13 @@ void UHealthComponent::HandleDeath()
 	}
 }
 
+void UHealthComponent::PrintToScreen(const FString& Message, float Duration, FColor Color)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, Duration, Color, Message);
+	}
+}
 
 // Called every frame
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType,

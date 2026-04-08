@@ -46,4 +46,6 @@ public:
 	float CurrentHealth;
 	
 	void HandleDeath();
+	
+	void PrintToScreen(const FString& Message, float Duration = 2.0f, FColor Color = FColor::White);
 };
