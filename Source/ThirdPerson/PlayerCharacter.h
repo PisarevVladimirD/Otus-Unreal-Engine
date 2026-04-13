@@ -26,7 +26,11 @@ protected:
 private:
 	AModularWeaponActor* PluginInstance; 
 
-	void CallAddFunction(); 
-	void CallRemoveFunction();
+	void CallAddFunctionPlugin(); 
+	void CallRemoveFunctionPlugin();
+	void SpawnModuleTestActor();
+	
+	FVector GetSpawnLocationInFrontOfCharacter(float Distance = 300.0f) const;
+
 };
 

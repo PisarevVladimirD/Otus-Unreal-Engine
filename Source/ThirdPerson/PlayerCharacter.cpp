@@ -7,7 +7,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-    PluginInstance = new AModularWeaponActor();
+    
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -19,21 +19,18 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveForward", this, &ABaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ABaseCharacter::MoveRight);
     
-    PlayerInputComponent->BindAction("CallAddFunction", IE_Pressed, this, &APlayerCharacter::CallAddFunction);
-    PlayerInputComponent->BindAction("CallRemoveFunction", IE_Pressed, this, &APlayerCharacter::CallRemoveFunction);
+    PlayerInputComponent->BindAction("CallAddFunctionPlugin", IE_Pressed, this, &APlayerCharacter::CallAddFunctionPlugin);
+    PlayerInputComponent->BindAction("CallRemoveFunctionPlugin", IE_Pressed, this, &APlayerCharacter::CallRemoveFunctionPlugin);
     
 }
-void APlayerCharacter::CallPluginFunctionAdd()
+FVector APlayerCharacter::GetSpawnLocationInFrontOfCharacter(float Distance) const
 {
-    if (PluginInstance)
+    if (!GetWorld())
     {
-        PluginInstance->AddModule(); // Вызываем функцию из плагина
+        return FVector::ZeroVector;
     }
-}
-void APlayerCharacter::CallPluginFunctionRemove()
-{
-    if (PluginInstance)
-    {
-        PluginInstance->RemoveModule(); // Вызываем функцию из плагина
-    }
+
+    FVector ForwardVector = GetActorForwardVector();
+
+    return GetActorLocation() + (ForwardVector * Distance);
 }
