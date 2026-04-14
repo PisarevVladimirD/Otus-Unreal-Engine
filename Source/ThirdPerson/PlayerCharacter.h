@@ -29,6 +29,7 @@ private:
 	void CallAddFunctionPlugin(); 
 	void CallRemoveFunctionPlugin();
 	void SpawnModuleTestActor();
+	void SpawnPluginTestActor();
 	
 	FVector GetSpawnLocationInFrontOfCharacter(float Distance = 300.0f) const;
 

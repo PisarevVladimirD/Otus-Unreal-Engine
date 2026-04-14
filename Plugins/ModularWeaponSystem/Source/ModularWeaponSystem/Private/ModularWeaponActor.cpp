@@ -9,9 +9,15 @@
 AModularWeaponActor::AModularWeaponActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	SetRootComponent(StaticMesh);
+	
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> RiflMesh(TEXT("/Game/Weapons/Rifle/Meshes/SM_Rifle.SM_Rifle"));
+	if (RiflMesh.Succeeded())
+	{
+		StaticMesh->SetStaticMesh(RiflMesh.Object);
+	}
 }
 
 // Called when the game starts or when spawned

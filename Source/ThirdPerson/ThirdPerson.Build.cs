@@ -21,7 +21,7 @@ public class ThirdPerson : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "ModularWeaponSystem", "ModularWeaponSystem" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "ModularWeaponSystem", "ModularWeaponSystem", "TestModule" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"ThirdPerson",

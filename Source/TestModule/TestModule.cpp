@@ -3,6 +3,14 @@
 #include "TestModule.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_MODULE( FDefaultModuleImpl, ThirdPerson );
+void FTestModule::StartupModule()
+{
+	
+}
 
-DEFINE_LOG_CATEGORY(LogThirdPerson)
+void FTestModule::ShutdownModule()
+{
+	
+}
+
+IMPLEMENT_MODULE(FTestModule, TestModule)
