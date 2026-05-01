@@ -27,7 +27,7 @@ void ABasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	
 	if (APlayerCharacter* Char = Cast<APlayerCharacter>(OtherActor))
 	{
-		PickUp(Char);
+		IPickupInterface::Execute_PickUp(this, Char);
 	}
 }
 
