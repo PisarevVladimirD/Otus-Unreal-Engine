@@ -6,12 +6,17 @@
 #include "Item_Pickup_System/BasePickup.h"
 #include "Item_Pickup_System/AmmoPickup.h"
 #include "Item_Pickup_System/OpticSightPickup.h"
+#include "InventoryComponent.h"
+#include "InventoryWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "Item_Pickup_System/WeaponPickup.h"
 #include "Engine/Engine.h"
 
 APlayerCharacter::APlayerCharacter()
 {
     ///PluginInstance = new AModularWeaponActor();
     PrimaryActorTick.bCanEverTick = false;
+    InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -41,6 +46,36 @@ void APlayerCharacter::CallPluginFunctionRemove()
         PluginInstance->RemoveModule(); // Вызываем функцию из плагина
     }
 }*/
+void APlayerCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    if (InventoryWidgetClass && InventoryComponent)
+    {
+        InventoryWidgetInstance = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
+        if (InventoryWidgetInstance)
+        {
+            InventoryWidgetInstance->InitializeWidget(InventoryComponent);
+            InventoryWidgetInstance->AddToViewport();
+        }
+    }
+    if (InventoryComponent)
+    {
+        {
+            InventoryComponent->AddWeapon(EWeaponType::Pistol, 30);
+            InventoryComponent->AddWeapon(EWeaponType::Rifle, 20);
+            InventoryComponent->AddWeapon(EWeaponType::Shotgun, 8);
+        }
+    }
+    if (IsLocallyControlled() && InventoryWidgetClass && InventoryComponent)
+    {
+        InventoryWidgetInstance = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
+        if (InventoryWidgetInstance)
+        {
+            InventoryWidgetInstance->InitializeWidget(InventoryComponent);
+            InventoryWidgetInstance->AddToViewport(0); 
+        }
+    }
+}
 void APlayerCharacter::AddItem(ABasePickup* Pickup)
 {
     if (!Pickup) return;
@@ -55,10 +90,7 @@ void APlayerCharacter::AddItem(ABasePickup* Pickup)
             AAmmoPickup* AmmoPickup = Cast<AAmmoPickup>(Pickup);
             if (AmmoPickup)
             {
-                int32 Amount = AmmoPickup->GetAmmoAmount();
-                int32& Count = InventoryCount.FindOrAdd(EItemType::Ammo);
-                Count += Amount;
-                ItemInfo = FString::Printf(TEXT("Picked up Ammo x%d (Total: %d)"), Amount, Count);
+                InventoryComponent->AddAmmo(AmmoPickup->GetAmmoAmount());
             }
         }
         break;
@@ -72,6 +104,15 @@ void APlayerCharacter::AddItem(ABasePickup* Pickup)
                 ScopeMagnification = SightPickup->GetMagnification();
                 InventoryCount.FindOrAdd(EItemType::OpticSight) = 1; // условно, считаем что один
                 ItemInfo = FString::Printf(TEXT("Picked up Optic Sight (%.1fx)"), ScopeMagnification);
+            }
+        }
+        break;
+    case EItemType::Weapon:
+        {
+            AWeaponPickup* WeaponPickup = Cast<AWeaponPickup>(Pickup);
+            if (WeaponPickup)
+            {
+                InventoryComponent->AddWeapon(WeaponPickup->GetWeaponType(), WeaponPickup->GetInitialAmmo());
             }
         }
         break;

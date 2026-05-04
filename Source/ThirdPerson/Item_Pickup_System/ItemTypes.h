@@ -14,5 +14,6 @@ enum class EItemType : uint8
 {
 	None        UMETA(DisplayName = "None"),
 	Ammo        UMETA(DisplayName = "Ammo"),
-	OpticSight  UMETA(DisplayName = "Optic Sight")
+	OpticSight  UMETA(DisplayName = "Optic Sight"),
+	Weapon      UMETA(DisplayName = "Weapon")
 };

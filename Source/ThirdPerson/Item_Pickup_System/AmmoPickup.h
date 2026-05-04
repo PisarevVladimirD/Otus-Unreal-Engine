@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Item_Pickup_System/BasePickup.h"
 #include "Item_Pickup_System/ItemTypes.h"
+#include "Item_Pickup_System/WeaponType.h"
 #include "AmmoPickup.generated.h"
 
 UCLASS()
@@ -17,6 +18,7 @@ public:
 
 	virtual EItemType GetItemType() const override { return EItemType::Ammo; }
 	int32 GetAmmoAmount() const { return AmmoAmount; }
+	
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
