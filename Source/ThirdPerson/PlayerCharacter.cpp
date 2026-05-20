@@ -2,6 +2,8 @@
 
 
 #include "PlayerCharacter.h"
+
+#include "HealthComponent.h"
 #include "ModularWeaponActor.h"
 #include "Item_Pickup_System/BasePickup.h"
 #include "Item_Pickup_System/AmmoPickup.h"
@@ -11,6 +13,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Item_Pickup_System/WeaponPickup.h"
 #include "Engine/Engine.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -128,4 +131,95 @@ void APlayerCharacter::AddItem(ABasePickup* Pickup)
     {
         GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, ItemInfo);
     }
+}
+void APlayerCharacter::Heal(float Amount)
+{
+    HealthComponent->CurrentHealth = FMath::Min(HealthComponent->CurrentHealth + Amount, HealthComponent->MaxHealth);
+    UE_LOG(LogTemp, Warning, TEXT("Healed for %f, current health: %f"), Amount, HealthComponent->CurrentHealth);
+}
+
+void APlayerCharacter::ApplySpeedBuff(float Multiplier, float Duration)
+{
+    UCharacterMovementComponent* Movement = GetCharacterMovement();
+    if (!Movement) return;
+
+    float NewSpeed = DefaultMaxWalkSpeed * Multiplier;
+    Movement->MaxWalkSpeed = NewSpeed;
+    
+    GetWorldTimerManager().ClearTimer(SpeedBuffTimer);
+    GetWorldTimerManager().SetTimer(SpeedBuffTimer, this, &APlayerCharacter::ResetSpeed, Duration, false);
+
+    UE_LOG(LogTemp, Warning, TEXT("Speed buff applied: x%f for %f sec"), Multiplier, Duration);
+}
+void APlayerCharacter::ResetSpeed()
+{
+    UCharacterMovementComponent* Movement = GetCharacterMovement();
+    if (Movement)
+    {
+        Movement->MaxWalkSpeed = DefaultMaxWalkSpeed;
+    }
+    UE_LOG(LogTemp, Warning, TEXT("Speed buff ended"));
+}
+
+void APlayerCharacter::ApplyInvulnerability(float Duration)
+{
+    HealthComponent->bInvulnerable = true;
+    
+    if (GetWorld())
+    {
+        GetWorldTimerManager().ClearTimer(InvulnerabilityTimer);
+        GetWorldTimerManager().SetTimer(InvulnerabilityTimer, this, &APlayerCharacter::DeactivateInvulnerability, Duration, false);
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("Invulnerability activated for %.1f seconds"), Duration);
+}
+
+void APlayerCharacter::DeactivateInvulnerability()
+{
+    bInvulnerable = false;
+    UE_LOG(LogTemp, Warning, TEXT("Invulnerability deactivated"));
+}
+void APlayerCharacter::ApplyDamageOverTime(float DPS, float Duration)
+{
+    GetWorldTimerManager().ClearTimer(DamageTimer);
+    FTimerDelegate DamageDelegate;
+    DamageDelegate.BindLambda([this, DPS]()
+    {
+        HealthComponent->TakeDamage(DPS);
+    });
+    GetWorldTimerManager().SetTimer(DamageTimer, DamageDelegate, 1.0f, true); // повторять каждую секунду
+    
+    FTimerHandle StopHandle;
+    GetWorldTimerManager().SetTimer(StopHandle, [this]()
+    {
+        GetWorldTimerManager().ClearTimer(DamageTimer);
+        UE_LOG(LogTemp, Warning, TEXT("Damage over time ended"));
+    }, Duration, false);
+
+    UE_LOG(LogTemp, Warning, TEXT("Damage over time applied: %f dps for %f sec"), DPS, Duration);
+}
+
+void APlayerCharacter::ApplySlow(float Ratio, float Duration)
+{
+    UCharacterMovementComponent* Movement = GetCharacterMovement();
+    if (!Movement) return;
+
+    float NewSpeed = DefaultMaxWalkSpeed * Ratio;
+    Movement->MaxWalkSpeed = NewSpeed;
+
+    GetWorldTimerManager().ClearTimer(SlowTimer);
+    GetWorldTimerManager().SetTimer(SlowTimer, this, &APlayerCharacter::ResetSlow, Duration, false);
+
+    UE_LOG(LogTemp, Warning, TEXT("Slow applied: speed x%f for %f sec"), Ratio, Duration);
+}
+
+void APlayerCharacter::ResetSlow()
+{
+    UCharacterMovementComponent* Movement = GetCharacterMovement();
+    if (Movement)
+    {
+        Movement->MaxWalkSpeed = DefaultMaxWalkSpeed;
+    }
+    
+    UE_LOG(LogTemp, Warning, TEXT("Slow debuff ended"));
 }

@@ -44,7 +44,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	float CurrentHealth;
-	
+	bool bInvulnerable;
+
 	void HandleDeath();
 	
 	void PrintToScreen(const FString& Message, float Duration = 2.0f, FColor Color = FColor::White);

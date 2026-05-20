@@ -26,6 +26,12 @@ void UHealthComponent::BeginPlay()
 }
 void UHealthComponent::TakeDamage(float Damage, AController* InstigatedBy, AActor* DamageCauser)
 {
+	
+	if (bInvulnerable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Неуязвимость: урон проигнорирован"));
+		return;
+	}
 	if (Damage <= 0.0f) return;
 	if (CurrentHealth <= 0.0f) return;
 
