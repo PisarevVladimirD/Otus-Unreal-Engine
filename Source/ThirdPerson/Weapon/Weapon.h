@@ -41,6 +41,7 @@ public:
 	
 	void PerformLineTrace(const FVector& Start, const FVector& Direction, float ConeAngle);
 	void ApplyDamage(AActor* HitActor, const FVector& HitLocation);
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void ResetFire();
 public:	
 	// Called every frame

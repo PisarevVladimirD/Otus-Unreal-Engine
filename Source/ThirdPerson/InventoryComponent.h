@@ -33,6 +33,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	int32 GetUniversalAmmo() const { return UniversalAmmo; }
 	
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Inventory")
+	void SetUniversalAmmo(int32 NewAmmo);
+	
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	const TSet<EWeaponType>& GetOwnedWeapons() const { return OwnedWeapons; }
 

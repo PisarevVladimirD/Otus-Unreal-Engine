@@ -45,6 +45,20 @@ bool UInventoryComponent::HasWeapon(EWeaponType WeaponType) const
 	return OwnedWeapons.Contains(WeaponType);
 }
 
+void UInventoryComponent::SetUniversalAmmo(int32 NewAmmo)
+{
+	NewAmmo = FMath::Max(0, NewAmmo);
+	if (UniversalAmmo != NewAmmo)
+	{
+		UniversalAmmo = NewAmmo;
+        
+		FString Msg = FString::Printf(TEXT("Universal ammo set to %d"), UniversalAmmo);
+		LogInventoryAction(Msg);
+
+		OnInventoryChanged.Broadcast();
+	}
+}
+
 void UInventoryComponent::LogInventoryAction(const FString& Message)
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *Message);
