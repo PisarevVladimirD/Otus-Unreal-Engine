@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "PlayerCharacter.h"
+#include "PickupableCharacter.h"
 
 // Sets default values
 ABasePickup::ABasePickup()
@@ -28,6 +29,11 @@ void ABasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (APlayerCharacter* Char = Cast<APlayerCharacter>(OtherActor))
 	{
 		IPickupInterface::Execute_PickUp(this, Char);
+	}
+	
+	if (OtherActor->Implements<UPickupableCharacter>())
+	{
+		IPickupInterface::Execute_PickUp(this, OtherActor);
 	}
 }
 
