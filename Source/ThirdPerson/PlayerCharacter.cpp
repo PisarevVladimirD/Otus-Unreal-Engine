@@ -176,7 +176,7 @@ void APlayerCharacter::ApplyInvulnerability(float Duration)
 
 void APlayerCharacter::DeactivateInvulnerability()
 {
-    bInvulnerable = false;
+    HealthComponent->bInvulnerable = false;
     UE_LOG(LogTemp, Warning, TEXT("Invulnerability deactivated"));
 }
 void APlayerCharacter::ApplyDamageOverTime(float DPS, float Duration)
